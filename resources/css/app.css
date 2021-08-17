@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .form-input {
+        @apply appearance-none focus:outline-none bg-gray-50 focus:bg-white border 
+            border-gray-100 focus:border-green-300 focus:border-2 p-1; 
+    }
+
+    .form-controls {
+        @apply flex flex-col -mb-1;
+    }
+
+    .router-link-exact-active {
+        @apply bg-gradient-to-br from-green-500 to-green-100 rounded;
+    }
+
+    .router-link-class {
+        @apply p-2 bg-gray-100 text-sm mx-1 border-t border-green-400;
+    }
+}
