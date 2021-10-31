@@ -23,6 +23,7 @@ class Product extends Model
         'name', 
         'size_id',
         'type',
+        'public'
     ];
 
     public function size()

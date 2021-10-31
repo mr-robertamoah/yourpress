@@ -1,6 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);
-
-/*! tailwindcss v2.2.7 | MIT License | https://tailwindcss.com */
+.text-xxs {
+  font-size: 0.55rem;
+  line-height: 0.8rem;
+}
+/*! tailwindcss v2.2.17 | MIT License | https://tailwindcss.com */
 
 /*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
 
@@ -454,6 +457,18 @@ button,
   cursor: pointer;
 }
 
+/**
+ * Override legacy focus reset from Normalize with modern Firefox focus styles.
+ *
+ * This is actually an improvement over the new defaults in Firefox in our testing,
+ * as it triggers the better focus styles even for links, which still use a dotted
+ * outline in Firefox by default.
+ */
+
+:-moz-focusring {
+  outline: auto;
+}
+
 table {
   border-collapse: collapse;
 }
@@ -603,14 +618,6 @@ video {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border-width: 1px;
-}
-
-.form-input:focus {
-  border-width: 2px;
-}
-
-.form-input {
   --tw-border-opacity: 1;
   border-color: rgba(243, 244, 246, var(--tw-border-opacity));
 }
@@ -634,9 +641,40 @@ video {
   padding: 0.25rem;
 }
 
+.form-input::-moz-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgba(107, 114, 128, var(--tw-placeholder-opacity));
+}
+
+.form-input:-ms-input-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgba(107, 114, 128, var(--tw-placeholder-opacity));
+}
+
+.form-input::placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgba(107, 114, 128, var(--tw-placeholder-opacity));
+}
+
 .form-input:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+.form-input-full {
+  border-width: 1px;
+}
+
+.form-input-full:focus {
+  border-width: 2px;
+}
+
+.form-input-b {
+  border-bottom-width: 1px;
+}
+
+.form-input-b:focus {
+  border-bottom-width: 2px;
 }
 
 .form-controls {
@@ -768,6 +806,7 @@ video {
 }
 
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -6454,8 +6493,12 @@ video {
   height: 100vh;
 }
 
+.h-9\/12 {
+  height: 75%;
+}
+
 .h-content {
-  height: content;
+  height: full-content;
 }
 
 .max-h-0 {
@@ -6623,7 +6666,7 @@ video {
 }
 
 .min-h-content {
-  min-height: content;
+  min-height: full-content;
 }
 
 .w-0 {
@@ -6895,7 +6938,7 @@ video {
 }
 
 .w-content {
-  width: content;
+  width: full-content;
 }
 
 .min-w-0 {
@@ -7012,6 +7055,10 @@ video {
 
 .max-w-screen-2xl {
   max-width: 1536px;
+}
+
+.max-w-1\/4 {
+  max-width: 25%;
 }
 
 .flex-1 {
@@ -32205,6 +32252,7 @@ video {
   }
 
   .sm\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -37891,8 +37939,12 @@ video {
     height: 100vh;
   }
 
+  .sm\:h-9\/12 {
+    height: 75%;
+  }
+
   .sm\:h-content {
-    height: content;
+    height: full-content;
   }
 
   .sm\:max-h-0 {
@@ -38060,7 +38112,7 @@ video {
   }
 
   .sm\:min-h-content {
-    min-height: content;
+    min-height: full-content;
   }
 
   .sm\:w-0 {
@@ -38332,7 +38384,7 @@ video {
   }
 
   .sm\:w-content {
-    width: content;
+    width: full-content;
   }
 
   .sm\:min-w-0 {
@@ -38449,6 +38501,10 @@ video {
 
   .sm\:max-w-screen-2xl {
     max-width: 1536px;
+  }
+
+  .sm\:max-w-1\/4 {
+    max-width: 25%;
   }
 
   .sm\:flex-1 {
@@ -63564,6 +63620,7 @@ video {
   }
 
   .md\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -69250,8 +69307,12 @@ video {
     height: 100vh;
   }
 
+  .md\:h-9\/12 {
+    height: 75%;
+  }
+
   .md\:h-content {
-    height: content;
+    height: full-content;
   }
 
   .md\:max-h-0 {
@@ -69419,7 +69480,7 @@ video {
   }
 
   .md\:min-h-content {
-    min-height: content;
+    min-height: full-content;
   }
 
   .md\:w-0 {
@@ -69691,7 +69752,7 @@ video {
   }
 
   .md\:w-content {
-    width: content;
+    width: full-content;
   }
 
   .md\:min-w-0 {
@@ -69808,6 +69869,10 @@ video {
 
   .md\:max-w-screen-2xl {
     max-width: 1536px;
+  }
+
+  .md\:max-w-1\/4 {
+    max-width: 25%;
   }
 
   .md\:flex-1 {
@@ -94923,6 +94988,7 @@ video {
   }
 
   .lg\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -100609,8 +100675,12 @@ video {
     height: 100vh;
   }
 
+  .lg\:h-9\/12 {
+    height: 75%;
+  }
+
   .lg\:h-content {
-    height: content;
+    height: full-content;
   }
 
   .lg\:max-h-0 {
@@ -100778,7 +100848,7 @@ video {
   }
 
   .lg\:min-h-content {
-    min-height: content;
+    min-height: full-content;
   }
 
   .lg\:w-0 {
@@ -101050,7 +101120,7 @@ video {
   }
 
   .lg\:w-content {
-    width: content;
+    width: full-content;
   }
 
   .lg\:min-w-0 {
@@ -101167,6 +101237,10 @@ video {
 
   .lg\:max-w-screen-2xl {
     max-width: 1536px;
+  }
+
+  .lg\:max-w-1\/4 {
+    max-width: 25%;
   }
 
   .lg\:flex-1 {
@@ -126282,6 +126356,7 @@ video {
   }
 
   .xl\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -131968,8 +132043,12 @@ video {
     height: 100vh;
   }
 
+  .xl\:h-9\/12 {
+    height: 75%;
+  }
+
   .xl\:h-content {
-    height: content;
+    height: full-content;
   }
 
   .xl\:max-h-0 {
@@ -132137,7 +132216,7 @@ video {
   }
 
   .xl\:min-h-content {
-    min-height: content;
+    min-height: full-content;
   }
 
   .xl\:w-0 {
@@ -132409,7 +132488,7 @@ video {
   }
 
   .xl\:w-content {
-    width: content;
+    width: full-content;
   }
 
   .xl\:min-w-0 {
@@ -132526,6 +132605,10 @@ video {
 
   .xl\:max-w-screen-2xl {
     max-width: 1536px;
+  }
+
+  .xl\:max-w-1\/4 {
+    max-width: 25%;
   }
 
   .xl\:flex-1 {
@@ -157641,6 +157724,7 @@ video {
   }
 
   .\32xl\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -163327,8 +163411,12 @@ video {
     height: 100vh;
   }
 
+  .\32xl\:h-9\/12 {
+    height: 75%;
+  }
+
   .\32xl\:h-content {
-    height: content;
+    height: full-content;
   }
 
   .\32xl\:max-h-0 {
@@ -163496,7 +163584,7 @@ video {
   }
 
   .\32xl\:min-h-content {
-    min-height: content;
+    min-height: full-content;
   }
 
   .\32xl\:w-0 {
@@ -163768,7 +163856,7 @@ video {
   }
 
   .\32xl\:w-content {
-    width: content;
+    width: full-content;
   }
 
   .\32xl\:min-w-0 {
@@ -163885,6 +163973,10 @@ video {
 
   .\32xl\:max-w-screen-2xl {
     max-width: 1536px;
+  }
+
+  .\32xl\:max-w-1\/4 {
+    max-width: 25%;
   }
 
   .\32xl\:flex-1 {

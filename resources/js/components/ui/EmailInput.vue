@@ -7,6 +7,7 @@
                 :name="name" 
                 :id="id" 
                 class="form-input w-full"
+                :class="[bottomBorder ? 'form-input-b' : 'form-input-full']"
                 :placeholder="placeholder"
                 :autofocus="autofocus"
                 :required="required"

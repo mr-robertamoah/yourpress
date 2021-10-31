@@ -85,6 +85,11 @@ class ApiTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        User::factory()->state([
+            'username' => 'mr_robertamoah',
+            'email' => 'mr_robertamoah@yahoo.com',
+        ])->create();
+
         $data = [
             'username' => null,
             'email' => 'mr_robertamoah@yahoo.com',
@@ -92,5 +97,8 @@ class ApiTest extends TestCase
         ];
 
         $response = $this->post('/api/login', $data);
+
+        $response->assertSuccessful()
+            ->assertJsonStructure(['message','user']);
     }
 }

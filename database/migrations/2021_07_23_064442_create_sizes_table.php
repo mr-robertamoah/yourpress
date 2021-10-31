@@ -16,9 +16,9 @@ class CreateSizesTable extends Migration
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
             $table->nullableMorphs('addedby');
-            $table->unsignedInteger('width');
-            $table->unsignedInteger('height');
-            $table->unsignedInteger('breadth');
+            $table->unsignedInteger('width')->default(0);
+            $table->unsignedInteger('height')->default(0);
+            $table->unsignedInteger('breadth')->default(0);
             $table->enum('units', ['INCHES', 'METRES', 'CENTIMETRES']);
             $table->softDeletes();
             $table->timestamps();

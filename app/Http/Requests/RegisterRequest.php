@@ -32,4 +32,12 @@ class RegisterRequest extends FormRequest
             'password' => ['alpha_dash', 'required', 'confirmed'],
         ];
     }
+
+    
+    public function messages()
+    {
+        return [
+            'userName.unique' => 'sorry, the username provided has already been taken 😏'
+        ];
+    }
 }

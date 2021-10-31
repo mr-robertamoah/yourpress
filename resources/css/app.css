@@ -5,8 +5,16 @@
 @layer components {
 
     .form-input {
-        @apply appearance-none focus:outline-none bg-gray-50 focus:bg-white border 
-            border-gray-100 focus:border-green-300 focus:border-2 p-1; 
+        @apply appearance-none focus:outline-none bg-gray-50 focus:bg-white
+            border-gray-100 focus:border-green-300 p-1 placeholder-gray-500; 
+    }
+
+    .form-input-full {
+        @apply border focus:border-2; 
+    }
+
+    .form-input-b {
+        @apply border-b focus:border-b-2; 
     }
 
     .form-controls {

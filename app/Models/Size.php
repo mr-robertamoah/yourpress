@@ -14,4 +14,11 @@ class Size extends Model
         SoftDeletes;
 
     const UNITS = ['INCHES', 'METRES', 'CENTIMETRES'];
+
+    protected $fillable = [
+        'width',
+        'height',
+        'breadth',
+        'units',
+    ];
 }

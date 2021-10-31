@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 // require('laravel-mix-alias');
 
 /*
@@ -12,15 +12,14 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.ts("resources/js/app.ts", "public/js")
     .vue({
-        globalStyles: 'resources/sass/app.scss',
+        globalStyles: "resources/sass/app.scss",
+        version: 3,
     })
-    .sass('resources/sass/app.scss', 'public/css')
-    .postCss("resources/css/app.css", "public/css", [
-        require("tailwindcss"),
-    ])
+    .sass("resources/sass/app.scss", "public/css")
+    .postCss("resources/css/app.css", "public/css", [require("tailwindcss")])
     .alias({
-        '@': '/resources/js',
-        '@components': '/resources/js/components',
+        "@": "/resources/js",
+        "@components": "/resources/js/components",
     });

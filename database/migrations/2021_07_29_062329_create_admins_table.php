@@ -16,7 +16,7 @@ class CreateAdminsTable extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->nullableMorphs('adminable');
-            $table->enum('type', ['SUPERADMIN', 'SUPERVISOR', 'ADMIN']);
+            $table->enum('type', ['SUPERADMIN', 'SUPERVISOR', 'ADMIN'])->default('ADMIN');
             $table->softDeletes();
             $table->timestamps();
         });

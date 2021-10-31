@@ -10,6 +10,12 @@ trait DTOTrait
 {
     public ?string $userId = null;
     public ?array $id = null;
+    public ?ReflectionObject $dtoReflectionObject = null;
+
+    public static function new()
+    {
+        return new static;
+    }
 
     public function __call($method, $parameters)
     {
@@ -24,11 +30,73 @@ trait DTOTrait
         }
     }
 
+    private function setReflectionObject($object = null)
+    {
+        if ($object) {
+            $object->dtoReflectionObject = new ReflectionObject($object);
+
+            return $object;
+        }
+
+        if (!is_null($this->dtoReflectionObject)) {
+            return $this;
+        }
+
+        $this->dtoReflectionObject = new ReflectionObject($this);
+
+        return $this;
+    }
+
+    public function getData()
+    {
+        $this->setReflectionObject();
+
+        $data = [];
+
+        foreach ($this->isValidProperty('dtoKeys') ? $this->dtoKeys : [] as $value) {
+
+            $data[$value] = $this->getValueForProperty($value);
+        }
+
+        return $data;
+    }
+
+    private function getValueForProperty($value)
+    {
+        foreach ($this->dtoReflectionObject as $property) {
+            if ($property->getName() === $value) {
+                return $property->getValue();
+            }
+        }
+
+        return null;
+    }
+
+    private function isValidProperty($value)
+    {
+        foreach ($this->dtoReflectionObject as $property) {
+            if ($property->getName() === $value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isInvalidProperty($value)
+    {
+        return ! $this->isValidProperty($value);
+    }
+
     public static function createFromRequest(Request $request)
     {
         $self = new static;
 
-        $self->userId = $request->user()?->id;
+        if (property_exists($self, 'user')) {
+            $self->user = $request->user();
+        } else {
+            $self->userId = $request->user()?->id;
+        }
 
         $self = $self->setMainPropertyId($self, $request);
 
@@ -38,17 +106,16 @@ trait DTOTrait
             return $self->createFromRequestExtension($request);
         }
 
-        ray($self)->green();
         return $self;
     }
 
     private function setOtherProperties($self, $request)
     {
-        $reflection = new ReflectionObject($self);
+        $self = $this->setReflectionObject($self);
 
         $input = $request->toArray();
 
-        foreach ($reflection->getProperties() as $property) {
+        foreach ($self->dtoReflectionObject->getProperties() as $property) {
             $self = $this->with($property, $this->getInputValue($input, $property));
         }
 
@@ -137,6 +204,10 @@ trait DTOTrait
         $type = $property->getType();
         $propertyName = $property->name;
 
+        if ($this->propertyIsExcluded($propertyName)) {
+            return $this;
+        }
+
         if (! is_null($parameter)) {
             $this->$propertyName = $this->setPropertyBasedOnType($type, $parameter);
 
@@ -168,16 +239,25 @@ trait DTOTrait
         return $this;
     }
 
+    public function propertyIsExcluded($propertyName)
+    {
+        if (in_array($propertyName, property_exists($this, 'dtoExclude') ? $this->dtoExclude : [])) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function setPropertyBasedOnType($type, $parameter)
     {
         $typeName = $type->getName();
 
         if ($typeName === 'array') {
-            return is_array($parameter) ? $parameter : json_decode($parameter);
+            return is_array($parameter) ? $parameter : (array) json_decode($parameter);
         }
 
         if ($typeName === 'object') {
-            return is_object($parameter) ? $parameter : json_decode($parameter);
+            return is_object($parameter) ? $parameter : (object) json_decode($parameter);
         }
 
         if (str_contains($typeName, 'int')) {

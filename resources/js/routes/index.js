@@ -1,16 +1,14 @@
-import VueRouter from "vue-router";
-import Vue from "vue";
+import { createRouter, createWebHistory } from "vue-router";
 
 import routes from "./routes";
-import {routerBeforeEach} from "./router";
+import { routerBeforeEach } from "./router";
 
-Vue.use(VueRouter)
-
-const router = new VueRouter({
-    mode: 'history',
+const router = createRouter({
+    mode: "history",
     routes,
-})
+    history: createWebHistory(),
+});
 
-router.beforeEach((to, from, next) => routerBeforeEach(to, from, next))
+router.beforeEach((to, from, next) => routerBeforeEach(to, from, next));
 
-export default router
+export default router;

@@ -19,8 +19,9 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('size_id')->nullable();
             $table->string('name');
             $table->enum('type', ['ENVELOPE', 'PAPER_BAG']);
-            $table->text('description');
-            $table->text('uses');
+            $table->text('description')->nullable();
+            $table->boolean('public')->default(false);
+            $table->json('uses');
             $table->softDeletes();
             $table->timestamps();
         });

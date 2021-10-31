@@ -1,7 +1,6 @@
 <template>
     <div>
         <product-component></product-component>
-        <checkbox>check</checkbox>
     </div>
 </template>
 

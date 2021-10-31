@@ -1,6 +1,12 @@
 <template>
     <login-register-layout>
         <login-register-card class="relative">
+            <Alert 
+                :message="alertMessage" 
+                :duration="alertDuration" 
+                :type="alertType" 
+                @clearAlert="clearAlert"/>
+                
             <login-register-form 
                 heading="register" 
                 :totalSections="totalSections" 
@@ -97,31 +103,17 @@
 </template>
 
 <script>
-import FormSection from '../components/layouts/FormSection.vue'
-import LoginRegisterCard from '../components/login/LoginRegisterCard.vue'
-import LoginRegisterForm from '../components/login/LoginRegisterForm.vue'
-import LoginRegisterLayout from '../components/login/LoginRegisterLayout.vue'
-import EmailInput from '../components/ui/EmailInput.vue'
-import PasswordInput from '../components/ui/PasswordInput.vue'
-import PrimaryButton from '../components/ui/PrimaryButton.vue'
-import TextInput from '../components/ui/TextInput.vue'
 import SecondaryButton from '../components/ui/SecondaryButton.vue'
-import ApiService from '../services/api.service'
+import UserService from '../services/user.service'
+import AlertMixin from '../mixins/Alert'
+import FormCommons from '../mixins/forms/Common'
     export default {
         components: { 
-            LoginRegisterLayout,
-            LoginRegisterForm,
-            LoginRegisterCard,
-            TextInput,
-            FormSection,
-            EmailInput,
-            PasswordInput,
             SecondaryButton,
-            PrimaryButton,
         },
+        mixins: [AlertMixin, FormCommons],
         data() {
             return {
-                loading: false,
                 currentSection: 1,
                 totalSections: 2,
                 formData: {
@@ -151,15 +143,6 @@ import ApiService from '../services/api.service'
             },
             'formData.otherNames'(newValue) {
                 this.clearError('otherNames')
-            },
-            'formData.userName'(newValue) {
-                this.clearError('userName')
-            },
-            'formData.email'(newValue) {
-                this.clearError('email')
-            },
-            'formData.password'(newValue) {
-                this.clearError('password')
             },
             'formData.passwordConfirmation'(newValue) {
                 this.clearError('passwordConfirmation')
@@ -240,42 +223,19 @@ import ApiService from '../services/api.service'
 
                 this.register()
             },
-            setError({error, property, errors}) {
-                
-                let propertyError = `${property}Errors`
-
-                if (! this.formData.hasOwnProperty(propertyError)) {
-                    return
-                }
-
-                if (error) {
-                    this.formData[propertyError].unshift(error)
-                }
-
-                if (errors?.length) {
-                    this.formData[propertyError] = [...errors]
-                }
-
+            setCurrentSection(property) {
                 let section = this.getSection(property)
 
                 if (this.currentSection !== section && section === 1) {
                     this.currentSection = section
                 }
             },
-            clearError(property) {
-                let propertyError = `${property}Errors`
-                if (! this.formData[propertyError]?.length) {
-                    return
-                }
-
-                this.formData[propertyError] = []
-            },
             async register() {
 
                 this.loading = true
 
                 try {
-                    let response = await ApiService.post('/register',{
+                    await UserService.registerUser({
                         'firstName': this.formData.firstName,
                         'lastName': this.formData.lastName,
                         'otherNames': this.formData.otherNames,
@@ -283,47 +243,12 @@ import ApiService from '../services/api.service'
                         'email': this.formData.email,
                         'password': this.formData.password,
                         'password_confirmation': this.formData.passwordConfirmation
-                    }, {mustHaveCookie: true})
-
-                    if (response.status !== 200) {
-                        
-                        return
-                    }
-                    
-                    console.log(response);
-                    await this.$store.dispatch('addUser', response.data.user)
-
-                    this.$router.push({name: 'welcome'})
-
+                    })
                 } catch (error) {
                     
-                    console.log(error.response);
                     this.setResponseErrors(error.response.data.errors)
                 } finally {
                     this.loading = false
-                }
-            },
-            setResponseErrors(errors) {
-                if (! errors) {
-                    return
-                }
-
-                let property
-                for (const errorName in errors) {
-                    property = errorName
-
-                    if (property === 'username') {
-                        property = 'userName'
-                    }
-                    
-                    if (property === 'password_confirmation') {
-                        property = 'passwordConfirmation'
-                    }
-
-                    this.setError({
-                        errors: errors[property],
-                        property,
-                    })
                 }
             },
             getSection(property) {

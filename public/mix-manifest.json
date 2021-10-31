@@ -4,7 +4,9 @@
     "/js/Login.js": "/js/Login.js",
     "/js/Register.js": "/js/Register.js",
     "/js/Welcome.js": "/js/Welcome.js",
+    "/js/Dashboard.js": "/js/Dashboard.js",
     "/js/Testing.js": "/js/Testing.js",
     "/js/Project.js": "/js/Project.js",
+    "/js/Profile.js": "/js/Profile.js",
     "/css/app.css": "/css/app.css"
 }

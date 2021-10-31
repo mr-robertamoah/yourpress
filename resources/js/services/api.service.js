@@ -1,28 +1,65 @@
-import axios from "axios"
-import cookie from 'js-cookie'
+import axios from "axios";
+import cookie from "js-cookie";
+import { AppConstants } from "../app";
+import router from "../routes";
+import StorageService from "./storage.service";
 
 const ApiService = {
-    mount() {
-        axios.interceptors()
+    redirectableStatusCode: [401, 419],
+    mountResponseInterceptor() {
+        return axios.interceptors.response.use(
+            (response) => response,
+            (error) => {
+                console.log(error.response);
+                if (
+                    AppConstants.apiServices.nonRedirectables.includes(
+                        router.currentRoute.name
+                    )
+                ) {
+                    throw error;
+                }
+
+                if (
+                    !redirectableStatusCode.includes(error.response?.status) &&
+                    error.response?.config?.url !== "/user"
+                ) {
+                    throw error;
+                }
+
+                StorageService.remove("auth");
+
+                router.push({
+                    name: "login",
+                    params: {
+                        message: "Authentication failed. Please login 😏",
+                    },
+                });
+
+                return error.response;
+            }
+        );
     },
     async get(url, config = null) {
-        await this.getCSRFCookie(config)
-        
-        return axios.get(url, config)
+        await this.getCSRFCookie(config);
+
+        return axios.get(url, config);
     },
-    getCSRFCookie(config) {
-        if (! config?.mustHaveCookie || cookie.get('laravel_session')) {
-            return
+    async getCSRFCookie(config) {
+        if (StorageService.get({ item: "auth", parse: true })) {
+            return;
         }
 
-        return this.get('/csrf-cookie')
+        if (!config?.mustHaveCookie) {
+            return;
+        }
+
+        return await this.get("/csrf-cookie");
     },
     async post(url, data, config = null) {
-        await this.getCSRFCookie(config)
+        await this.getCSRFCookie(config);
 
-        return axios.post(url, data, config)
+        return axios.post(url, data, config);
     },
+};
 
-}
-
-export default ApiService
+export default ApiService;

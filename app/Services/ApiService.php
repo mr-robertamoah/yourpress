@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTOs\UserDTO;
 use App\Exceptions\ApiException;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -43,12 +44,14 @@ class ApiService
             );
         }
 
-        return $user;
+        Auth::login($user);
+
+        return Auth::user();
     }
 
     public function register(UserDTO $userDTO)
     {
-        return User::create([
+        $user = User::create([
             'first_name' => $userDTO->firstName,
             'last_name' => $userDTO->lastName,
             'other_names' => $userDTO->otherNames,
@@ -56,5 +59,9 @@ class ApiService
             'email' => $userDTO->email,
             'password' => Hash::make($userDTO->password),
         ]);
+
+        Auth::login($user);
+
+        return $user;
     }
 }

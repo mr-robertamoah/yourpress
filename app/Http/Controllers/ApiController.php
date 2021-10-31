@@ -15,7 +15,7 @@ class ApiController extends Controller
 {
     public function getUser(Request $request)
     {
-        $user = $request->user();
+        $user = Auth::user();
 
         return response()->json([
             'message' => 'successful',
@@ -29,6 +29,10 @@ class ApiController extends Controller
             UserDTO::createFromRequest($request)
         );
 
+        // $request->session()->regenerate();
+
+        // $request->session()->regenerateToken();
+
         return response()->json([
             'message' => 'successful',
             'user' => new UserResource($user)
@@ -41,6 +45,10 @@ class ApiController extends Controller
             UserDTO::createFromRequest($request, false)
         );
 
+        $request->session()->regenerate();
+
+        $request->session()->regenerateToken();
+
         return response()->json([
             'message' => 'successful',
             'user' => new UserResource($user)
@@ -50,6 +58,10 @@ class ApiController extends Controller
     public function logout(LogoutRequest $request)
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
 
         return response()->json([
             'message' => 'successful'

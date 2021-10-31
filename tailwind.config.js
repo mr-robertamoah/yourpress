@@ -9,16 +9,18 @@ module.exports = {
     extend: {
       minHeight: {
         '1/2': '50%',
-        'content': 'content'
+        'content': 'full-content'
       },
       maxWidth: {
+        '1/4': '25%',
         '80': '320px',
       },
       height: {
-        'content': 'content'
+        '9/12': '75%',
+        'content': 'full-content'
       },
       width: {
-        'content': 'content'
+        'content': 'full-content'
       },
       transitionProperty: {
         "width": 'width',

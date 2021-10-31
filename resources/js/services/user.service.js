@@ -1,6 +1,7 @@
 import ApiService from "./api.service"
 import router from "../routes"
 import store from "../storage"
+import StorageService from "./storage.service"
 
 const UserService = {
     registerUser: async (data) => {
@@ -8,6 +9,11 @@ const UserService = {
             .then(response=>{
                 store.dispatch('addUser', response.data.user)
                 router.push({name: 'welcome'})
+                
+                return response
+            })
+            .catch(error=>{
+                throw error
             })
     },
     loginUser: async (data) => {
@@ -15,6 +21,11 @@ const UserService = {
             .then(response=>{
                 store.dispatch('addUser', response.data.user)
                 router.push({name: 'welcome'})
+                
+                return response
+            })
+            .catch(error=>{
+                throw error
             })
     },
     logoutUser: async (data) => {
@@ -22,13 +33,21 @@ const UserService = {
             .then(response=>{
                 store.dispatch('removeUser')
                 router.push({name: 'home'})
+                
+                return response
+            })
+            .catch(error=>{
+                throw error
             })
     },
-    getUser: async (data) => {
-        await ApiService.post('/register', data, {mustHaveCookie: true})
+    getUser: async () => {
+        await ApiService.get('/user')
             .then(response=>{
                 store.dispatch('addUser', response.data.user)
+                
+                return response
             })
+            .catch(error=>error.response)
     }
 }
 
